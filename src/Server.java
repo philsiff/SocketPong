@@ -57,7 +57,7 @@ public class Server extends BasicGame{
     }
 
     public void init(GameContainer gc){
-        ball = new Ball(new Vector2f(1, 1), 400, 300);
+        ball = new Ball(new Vector2f(2, 2), 400, 300);
         serverInfo = new ServerInfo(ball);
     }
 
@@ -83,7 +83,6 @@ public class Server extends BasicGame{
                 public void run(){
                     while(true){
                         try{
-
                             if(in == null){in = new ObjectInputStream(socket.getInputStream());}
                             Object obj = in.readObject();
                             messages.put(obj);
@@ -103,11 +102,8 @@ public class Server extends BasicGame{
 
         public void write(Object obj) {
             try{
-                if(obj instanceof ServerInfo){
-                    System.out.println(((ServerInfo) obj).ball.x);
-                }
-
                 out.writeObject((Object) obj);
+                out.reset();
             }
             catch(IOException e){ e.printStackTrace(); }
         }
@@ -118,8 +114,9 @@ public class Server extends BasicGame{
     }
 
     public void sendToAll(Object message){
-        for(ConnectionToClient client : clientList)
+        for(ConnectionToClient client : clientList) {
             client.write(message);
+        }
     }
 
 }

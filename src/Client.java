@@ -37,6 +37,9 @@ public class Client extends BasicGame {
                     try{
                         Object message = messages.take();
                         // Do some handling here...
+                        if(message instanceof ServerInfo){
+                            ball = ((ServerInfo) message).ball;
+                        }
 
                         if(message instanceof String){
                             if(((String) message).substring(0, 10).equals("HczGkfodKL")){
@@ -54,7 +57,7 @@ public class Client extends BasicGame {
     }
 
     public void init(GameContainer gc) throws SlickException{
-
+        gc.setAlwaysRender(true);
     }
 
     public void update(GameContainer gc, int i) throws SlickException{
@@ -82,10 +85,7 @@ public class Client extends BasicGame {
                     while(true){
                         try{
                             if(in==null){in = new ObjectInputStream(socket.getInputStream());}
-                            Object obj = in.readObject();
-                            if(obj instanceof ServerInfo){
-                                System.out.println(((ServerInfo) obj).ball.x);
-                            }
+                            Object obj = ((Object) in.readObject());
                             messages.put((Object)obj);
                         }
                         catch(IOException e){ e.printStackTrace(); } catch (InterruptedException e) {
