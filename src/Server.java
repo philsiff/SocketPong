@@ -13,6 +13,8 @@ public class Server extends BasicGame{
     private LinkedBlockingQueue<Object> messages;
     private ServerSocket serverSocket;
     private Ball ball;
+    private Paddle paddle1;
+    private Paddle paddle2;
     private ServerInfo serverInfo;
 
     public Server(int port) throws IOException {
@@ -44,8 +46,16 @@ public class Server extends BasicGame{
                     try{
                         Object message = messages.take();
                         // Do some handling here...
-                        System.out.println(message);
-                        sendToAll(message);
+                        if(message instanceof ClientInfo){
+                            if(((ClientInfo) message).clientNumber == 1){
+                                serverInfo.paddle1 = ((ClientInfo) message).paddle;
+                            }else if(((ClientInfo) message).clientNumber == 2){
+                                serverInfo.paddle2 = ((ClientInfo) message).paddle;
+                            }
+                        }
+                        if(message instanceof String) {
+                            System.out.println(message);
+                        }
                     }
                     catch(InterruptedException e){ }
                 }
@@ -57,8 +67,10 @@ public class Server extends BasicGame{
     }
 
     public void init(GameContainer gc){
-        ball = new Ball(new Vector2f(2, 2), 400, 300);
-        serverInfo = new ServerInfo(ball);
+        ball = new Ball(new Vector2f(4, 4), 400, 300);
+        paddle1 = new Paddle(30, gc.getHeight()/2 - 30);
+        paddle2 = new Paddle(gc.getWidth() - 50, gc.getHeight()/2 - 30);
+        serverInfo = new ServerInfo(ball, paddle1, paddle2);
     }
 
     public void update(GameContainer gc, int i){

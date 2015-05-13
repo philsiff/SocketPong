@@ -22,6 +22,10 @@ public class Client extends BasicGame {
     private Socket socket;
     private int clientNumber;
     private Ball ball;
+    private Paddle paddle1;
+    private Paddle paddle2;
+    private ClientInfo clientInfo;
+    private Input input;
 
 
     public Client(String IPAddress, int port) throws IOException{
@@ -39,6 +43,8 @@ public class Client extends BasicGame {
                         // Do some handling here...
                         if(message instanceof ServerInfo){
                             ball = ((ServerInfo) message).ball;
+                            paddle1 = ((ServerInfo) message).paddle1;
+                            paddle2 = ((ServerInfo) message).paddle2;
                         }
 
                         if(message instanceof String){
@@ -58,16 +64,54 @@ public class Client extends BasicGame {
 
     public void init(GameContainer gc) throws SlickException{
         gc.setAlwaysRender(true);
+        clientInfo = new ClientInfo(clientNumber, paddle1);
     }
 
     public void update(GameContainer gc, int i) throws SlickException{
-
+        input = gc.getInput();
+        if(input.isKeyDown(Input.KEY_UP)){
+            if(clientNumber == 1){
+                paddle1.y -= 5;
+                clientInfo.paddle = paddle1;
+                send((Object)clientInfo);
+            }else if(clientNumber == 2){
+                paddle2.y -= 5;
+                clientInfo.paddle = paddle2;
+                send((Object)clientInfo);
+            }
+        }
+        if(input.isKeyDown(Input.KEY_DOWN)){
+            if(clientNumber == 1){
+               paddle1.y += 5;
+                clientInfo.paddle = paddle1;
+                send((Object)clientInfo);
+            }else if(clientNumber == 2){
+                paddle2.y += 5;
+                clientInfo.paddle = paddle2;
+                send((Object)clientInfo);
+            }
+        }
     }
 
     public void render(GameContainer gc, Graphics g){
         if(ball != null){
+            if(clientNumber == 2){
+                ball.x -= gc.getWidth();
+            }
             ball.render(gc, g);
         }
+        if(paddle1 != null){
+            if(clientNumber == 1) {
+                paddle1.render(gc, g);
+            }
+        }
+        if(paddle2 != null){
+            if(clientNumber == 2) {
+                paddle2.render(gc, g);
+            }
+        }
+
+
     }
 
     private class ConnectionToServer {
@@ -105,7 +149,8 @@ public class Client extends BasicGame {
 
         private void write(Object obj) {
             try{
-                out.writeObject(obj);
+                out.writeObject((Object) obj);
+                out.reset();
             }
             catch(IOException e){ e.printStackTrace(); }
         }

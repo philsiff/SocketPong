@@ -5,10 +5,10 @@ import java.io.Serializable;
  */
 public class ClientInfo implements Serializable{
     int clientNumber;
-    int paddleY;
+    Paddle paddle;
 
-    public ClientInfo(int clientNumber, int paddleY) {
+    public ClientInfo(int clientNumber, Paddle paddle) {
         this.clientNumber = clientNumber;
-        this.paddleY = paddleY;
+        this.paddle = paddle;
     }
 }

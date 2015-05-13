@@ -23,7 +23,7 @@ public class Ball implements Serializable{
 
     public void update(GameContainer gc, int i){
         if(x < 0){movement.set(-1 * movement.getX(), movement.getY());}
-        if(x + (2 * radius) > gc.getWidth()){movement.set(-1 * movement.getX(), movement.getY());}
+        if(x + (2 * radius) > gc.getWidth() * 2){movement.set(-1 * movement.getX(), movement.getY());}
         if(y < 0){movement.set(movement.getX(), -1 * movement.getY());}
         if(y + (2 * radius) > gc.getHeight()){movement.set(movement.getX(), -1 * movement.getY());}
 
