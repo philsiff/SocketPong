@@ -66,16 +66,24 @@ public class Server extends BasicGame{
         messageHandling.start();
     }
 
+    boolean updating = true;
     public void init(GameContainer gc){
-        ball = new Ball(new Vector2f(4, 4), 400, 300);
+        ball = new Ball(new Vector2f((float)4.0, (float)4.0), 400, 300);
         paddle1 = new Paddle(30, gc.getHeight()/2 - 30);
         paddle2 = new Paddle(gc.getWidth() - 50, gc.getHeight()/2 - 30);
         serverInfo = new ServerInfo(ball, paddle1, paddle2);
+
     }
 
     public void update(GameContainer gc, int i){
-        serverInfo.ball.update(gc, i);
-        sendToAll(serverInfo);
+        if(updating) {
+            serverInfo.ball.update(gc, i);
+            if (collision(serverInfo.paddle1, serverInfo.ball)) {
+                System.out.println(calculateAngle(serverInfo.paddle1, serverInfo.ball));
+
+            }
+            sendToAll(serverInfo);
+        }
     }
 
     public void render(GameContainer gc, Graphics g){
@@ -129,6 +137,59 @@ public class Server extends BasicGame{
         for(ConnectionToClient client : clientList) {
             client.write(message);
         }
+    }
+
+    public boolean collision(Paddle paddle, Ball ball){
+        int ballCX = ball.x + ball.radius;
+        int ballCY = ball.y + ball.radius;
+        if(paddle.x <= ballCX && ballCX <= paddle.x + paddle.width){ //Top Side
+            if(Math.abs(paddle.y - ballCY) <= ball.radius){
+                return true;
+            }
+        }
+        if(Math.pow(paddle.x - ballCX, 2) + Math.pow(paddle.y - ballCY, 2) <= Math.pow(ball.radius, 2) ||
+                Math.pow((paddle.x + paddle.width) - ballCX, 2) + Math.pow(paddle.y - ballCY, 2) <= Math.pow(ball.radius, 2)){
+            return true;
+        }
+
+        if(paddle.y <= ballCY && ballCY <= paddle.y + paddle.height){ //Right Side
+            if(Math.abs((paddle.x + paddle.width) - ballCX) <= ball.radius){
+                return true;
+            }
+        }
+
+        if(Math.pow((paddle.y - ballCY),2) + Math.pow((paddle.x + paddle.width) - ballCX,2) <= Math.pow(ball.radius, 2) ||
+                Math.pow((paddle.y + paddle.height) - ballCY,2) + Math.pow((paddle.x + paddle.width) - ballCX,2) <= Math.pow(ball.radius, 2)){
+            return true;
+        }
+
+        if(paddle.x <= ballCX && ballCX <= paddle.x + paddle.width){ //Bottom Side
+            if(Math.abs((paddle.y + paddle.height) - ballCY) <= ball.radius){
+                return true;
+            }
+        }
+
+        if(Math.pow(paddle.x - ballCX, 2) + Math.pow(paddle.y + paddle.height - ballCY, 2) <= Math.pow(ball.radius, 2) ||
+                Math.pow((paddle.x + paddle.width) - ballCX, 2) + Math.pow(paddle.y + paddle.height - ballCY, 2) <= Math.pow(ball.radius, 2)){
+            return true;
+        }
+
+        if(paddle.y <= ballCY && ballCY <= paddle.y + paddle.height){ //Left Side
+            if(Math.abs((paddle.x) - ballCX) <= ball.radius){
+                return true;
+            }
+        }
+
+        if(Math.pow((paddle.y - ballCY),2) + Math.pow((paddle.x) - ballCX,2) <= Math.pow(ball.radius, 2) ||
+                Math.pow((paddle.y + paddle.height) - ballCY,2) + Math.pow((paddle.x) - ballCX,2) <= Math.pow(ball.radius, 2)){
+            return true;
+        }
+
+        return false;
+    }
+
+    public double calculateAngle(Paddle paddle, Ball ball){
+        return Math.toDegrees(Math.atan2((ball.y + ball.radius) - (paddle.y + (paddle.width / 2)), (ball.x + ball.radius) - (paddle.x + (paddle.width / 2))));
     }
 
 }

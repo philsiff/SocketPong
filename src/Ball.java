@@ -34,4 +34,13 @@ public class Ball implements Serializable{
     public void render(GameContainer gc, Graphics g){
         g.draw(new Circle(x + 20, y + 20, 20));
     }
+
+    public void setMovementAngle(double angle){
+
+    }
+
+    public void setMovementMagnitude(float magnitude){
+        double angle = Math.atan2(movement.getY(), movement.getX());
+        movement.set((float)(magnitude * Math.cos((double) angle)), (float) (magnitude * Math.sin((double) angle)));
+    }
 }
