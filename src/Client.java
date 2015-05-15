@@ -107,7 +107,9 @@ public class Client extends BasicGame {
         }
         if(paddle2 != null){
             if(clientNumber == 2) {
+                paddle2.x -= gc.getWidth();
                 paddle2.render(gc, g);
+                paddle2.x += gc.getWidth();
             }
         }
 
