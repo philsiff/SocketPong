@@ -12,11 +12,11 @@ public class Paddle implements Serializable {
     int height;
     int width;
 
-    public Paddle(int x, int y) {
+    public Paddle(int x, int y, int height, int width) {
         this.y = y;
         this.x = x;
-        this.height = 60;
-        this.width = 20;
+        this.height = height;
+        this.width = width;
     }
 
     public void render(GameContainer gc, Graphics g){

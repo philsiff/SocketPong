@@ -15,7 +15,11 @@ public class Server extends BasicGame{
     private Ball ball;
     private Paddle paddle1;
     private Paddle paddle2;
+    private int paddleHeight = 100;
+    private int paddleWidth = 20;
     private ServerInfo serverInfo;
+    private boolean paddle1Hit = false;
+    private boolean paddle2Hit = false;
 
     public Server(int port) throws IOException {
         super("Pong Server");
@@ -65,38 +69,47 @@ public class Server extends BasicGame{
         //messageHandling.setDaemon(true);
         messageHandling.start();
     }
-
+    Input input;
     public void init(GameContainer gc){
-        ball = new Ball(new Vector2f((float)1, (float)1), 400, 300);
-        paddle1 = new Paddle(30, gc.getHeight()/2 - 30);
-        paddle2 = new Paddle(gc.getWidth()*2 - 50, gc.getHeight()/2 - 30);
+        ball = new Ball(new Vector2f((float)1, (float) 1), 400, 300);
+        paddle1 = new Paddle(10 + paddleWidth, gc.getHeight()/2 - (paddleHeight/2), paddleHeight, paddleWidth);
+        paddle2 = new Paddle(gc.getWidth()*2 - 10 - paddleWidth, gc.getHeight()/2 - (paddleHeight/2), paddleHeight, paddleWidth);
         serverInfo = new ServerInfo(ball, paddle1, paddle2);
-
+        input = gc.getInput();
     }
 
     public void update(GameContainer gc, int i){
-        serverInfo.ball.update(gc, i);
-        if (collision(serverInfo.paddle1, serverInfo.ball)) {
-            double collisionAngle = calculateAngle(serverInfo.paddle1, serverInfo.ball);
-            if(serverInfo.ball.movement.getY() > 0){
-                if(collisionAngle < 0){
-                    serverInfo.ball.setMovementAngle(-collisionAngle);
-                }else{
-                    serverInfo.ball.setMovementAngle(collisionAngle);
-                }
-            }else{
-                if(collisionAngle < 0){
-                    serverInfo.ball.setMovementAngle(collisionAngle);
-                }else{
-                    serverInfo.ball.setMovementAngle(-collisionAngle);
-                }
-            }
-            if(serverInfo.ball.magnitude < 5) {
-                serverInfo.ball.setMovementMagnitude((float) (ball.magnitude + .05));
-            }
+
+        if(input.isKeyDown(Input.KEY_SPACE)){
+            serverInfo.ball.setMovementAngle(90);
         }
-        if (collision(serverInfo.paddle2, serverInfo.ball)){
-            double collisionAngle = calculateAngle(serverInfo.paddle2, serverInfo.ball);
+
+        serverInfo.ball.update(gc, i);
+        if (collision(serverInfo.paddle1, serverInfo.ball) && !paddle1Hit) {
+            float collisionAngle = calculateAngle(serverInfo.paddle1, serverInfo.ball);
+            System.out.println("Paddle1 Collision: " + collisionAngle);
+            if(serverInfo.ball.movement.getY() > 0){
+                if(collisionAngle < 0){
+                    serverInfo.ball.setMovementAngle(collisionAngle);
+                }else{
+                    serverInfo.ball.setMovementAngle(-collisionAngle);
+                }
+            }else{
+                if(collisionAngle < 0){
+                    serverInfo.ball.setMovementAngle(collisionAngle);
+                }else{
+                    serverInfo.ball.setMovementAngle(-collisionAngle);
+                }
+            }
+            if(serverInfo.ball.magnitude < 10) {
+                serverInfo.ball.movement.scale((float)1.1);
+            }
+            paddle1Hit = true;
+            paddle2Hit = false;
+        }
+        if (collision(serverInfo.paddle2, serverInfo.ball) && !paddle2Hit){
+            float collisionAngle = calculateAngle(serverInfo.paddle2, serverInfo.ball);
+            System.out.println("Paddle2 Collision: " + collisionAngle);
             if(serverInfo.ball.movement.getY() > 0){
                 if(collisionAngle < 0){
                     serverInfo.ball.setMovementAngle(-collisionAngle);
@@ -111,8 +124,10 @@ public class Server extends BasicGame{
                 }
             }
             if(serverInfo.ball.magnitude < 5) {
-                serverInfo.ball.setMovementMagnitude((float) (ball.magnitude + .05));
+                serverInfo.ball.movement.scale((float)1.1);
             }
+            paddle1Hit = false;
+            paddle2Hit = true;
         }
         sendToAll(serverInfo);
 
@@ -220,8 +235,12 @@ public class Server extends BasicGame{
         return false;
     }
 
-    public double calculateAngle(Paddle paddle, Ball ball){
-        return Math.toDegrees(Math.atan2((ball.y + ball.radius) - (paddle.y + (paddle.width / 2)), (ball.x + ball.radius) - (paddle.x + (paddle.width / 2))));
+    public float calculateAngle(Paddle paddle, Ball ball){
+        float paddleCX = paddle.x + (paddle.width/2);
+        float paddleCY = paddle.y + (paddle.height/2);
+        float ballCX = ball.x + ball.radius;
+        float ballCY = ball.y + ball.radius;
+        return (float) Math.toDegrees((double)Math.atan2(ballCY - paddleCY, ballCX - paddleCX));
     }
 
 }
