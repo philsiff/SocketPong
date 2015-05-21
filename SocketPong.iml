@@ -10,7 +10,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/slick/lib/jinput.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/jinput.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -19,7 +19,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/slick/lib/lwjgl.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/lwjgl.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -28,7 +28,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/slick/lib/lwjgl_util.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/lwjgl_util.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -37,7 +37,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/slick/lib/slick.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/slick.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
