@@ -20,6 +20,8 @@ public class Server extends BasicGame{
     private ServerInfo serverInfo;
     private boolean paddle1Hit = false;
     private boolean paddle2Hit = false;
+    private int gameContainerHeight;
+    private int gameContainerWidth;
 
     public Server(int port) throws IOException {
         super("Pong Server");
@@ -35,6 +37,10 @@ public class Server extends BasicGame{
                         System.out.println("User Connected");
                         clientList.add(new ConnectionToClient(s));
                         sendToOne(clientList.size()-1, "HczGkfodKL" + clientList.size());
+                        if(clientList.size() >= 1){
+                            sendToAll("evDWphmwFh" + clientList.size());
+                        }
+                        serverInfo.paddle2.x = gameContainerWidth*clientList.size() - 10 - paddleWidth;
                     }
                     catch(IOException e){ e.printStackTrace(); }
                 }
@@ -69,30 +75,35 @@ public class Server extends BasicGame{
         //messageHandling.setDaemon(true);
         messageHandling.start();
     }
-    Input input;
     public void init(GameContainer gc){
         ball = new Ball(new Vector2f((float)1, (float) 1), 400, 300);
         paddle1 = new Paddle(10 + paddleWidth, gc.getHeight()/2 - (paddleHeight/2), paddleHeight, paddleWidth);
-        paddle2 = new Paddle(gc.getWidth()*2 - 10 - paddleWidth, gc.getHeight()/2 - (paddleHeight/2), paddleHeight, paddleWidth);
+        paddle2 = new Paddle(gc.getWidth()*clientList.size() - 10 - paddleWidth, gc.getHeight()/2 - (paddleHeight/2), paddleHeight, paddleWidth);
         serverInfo = new ServerInfo(ball, paddle1, paddle2);
-        input = gc.getInput();
+        gameContainerHeight = gc.getHeight();
+        gameContainerWidth = gc.getWidth();
     }
 
     public void update(GameContainer gc, int i){
-
-        if(input.isKeyDown(Input.KEY_SPACE)){
-            serverInfo.ball.setMovementAngle(90);
+        if(serverInfo.ball.x < 0){
+            serverInfo.ball.movement.set(-1 * serverInfo.ball.movement.getX(), serverInfo.ball.movement.getY());
+            serverInfo.paddle2Score++;
         }
-
+        if(serverInfo.ball.x + (2 * serverInfo.ball.radius) > gc.getWidth() * (clientList.size())){
+            serverInfo.ball.movement.set(-1 * serverInfo.ball.movement.getX(), serverInfo.ball.movement.getY());
+            serverInfo.paddle1Score++;
+        }
+        if(serverInfo.ball.y < 0){serverInfo.ball.movement.set(serverInfo.ball.movement.getX(), -1 * serverInfo.ball.movement.getY());}
+        if(serverInfo.ball.y + (2 * serverInfo.ball.radius) > gc.getHeight()){serverInfo.ball.movement.set(serverInfo.ball.movement.getX(), -1 * serverInfo.ball.movement.getY());}
         serverInfo.ball.update(gc, i);
         if (collision(serverInfo.paddle1, serverInfo.ball) && !paddle1Hit) {
             float collisionAngle = calculateAngle(serverInfo.paddle1, serverInfo.ball);
             System.out.println("Paddle1 Collision: " + collisionAngle);
             if(serverInfo.ball.movement.getY() > 0){
                 if(collisionAngle < 0){
-                    serverInfo.ball.setMovementAngle(collisionAngle);
-                }else{
                     serverInfo.ball.setMovementAngle(-collisionAngle);
+                }else{
+                    serverInfo.ball.setMovementAngle(collisionAngle);
                 }
             }else{
                 if(collisionAngle < 0){
@@ -129,8 +140,8 @@ public class Server extends BasicGame{
             paddle1Hit = false;
             paddle2Hit = true;
         }
-        sendToAll(serverInfo);
 
+        sendToAll(serverInfo);
     }
 
     public void render(GameContainer gc, Graphics g){

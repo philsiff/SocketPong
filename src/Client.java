@@ -26,6 +26,7 @@ public class Client extends BasicGame {
     private Paddle paddle2;
     private ClientInfo clientInfo;
     private Input input;
+    private int numClients;
 
 
     public Client(String IPAddress, int port) throws IOException{
@@ -51,6 +52,11 @@ public class Client extends BasicGame {
                             if(((String) message).substring(0, 10).equals("HczGkfodKL")){
                                 clientNumber = Integer.parseInt(((String) message).substring(10, 11));
                                 System.out.println(clientNumber);
+                                System.out.println("NumClients: " + numClients);
+                            }
+                            if(((String) message).substring(0, 10).equals("evDWphmwFh")){
+                                numClients = Integer.parseInt(((String) message).substring(10,11));
+                                System.out.println("NumClients: " + numClients);
                             }
                         }
                     }
@@ -94,23 +100,18 @@ public class Client extends BasicGame {
     }
 
     public void render(GameContainer gc, Graphics g){
-        if(ball != null){
-            if(clientNumber == 2){
-                ball.x -= gc.getWidth();
-            }
-            ball.render(gc, g);
-        }
-        if(paddle1 != null){
+        if(paddle2 != null && paddle1 != null && ball != null){
             if(clientNumber == 1) {
                 paddle1.render(gc, g);
             }
-        }
-        if(paddle2 != null){
-            if(clientNumber == 2) {
-                paddle2.x -= gc.getWidth();
+            else if(clientNumber == 2) {
+                paddle2.x -= gc.getWidth() * (numClients - 1);
+                ball.x -= gc.getWidth() * (numClients - 1);
                 paddle2.render(gc, g);
-                paddle2.x += gc.getWidth();
+            }else{
+                ball.x -= gc.getWidth() * (clientNumber - 2);
             }
+            ball.render(gc, g);
         }
 
 
