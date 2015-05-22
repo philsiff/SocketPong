@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SocketPongClient:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/SocketPongClient_jar</output-path>
+    <root id="archive" name="SocketPong.jar">
+      <element id="module-output" name="SocketPong" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/lwjgl.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/slick.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/lwjgl_util.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/jinput.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
