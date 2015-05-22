@@ -2,18 +2,17 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="SocketPongClient:jar" />
-      <artifact name="SocketPongServer:jar" />
+      <artifact name="SocketPong:jar" />
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0edba39c-3483-4dcc-8602-ed04c8fcb546" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/artifacts/SocketPongClient_jar.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/SocketPongClient.jar" afterPath="$PROJECT_DIR$/libs/SocketPongClient.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/SocketPongServer.jar" afterPath="$PROJECT_DIR$/libs/SocketPongServer.jar" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libs/SocketPongClient.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libs/SocketPongServer.jar" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/artifacts/SocketPongClient_jar.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/SocketPong_jar.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SocketPong.iml" afterPath="$PROJECT_DIR$/SocketPong.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Pong.iws" />
@@ -101,8 +100,8 @@
       <file leaf-file-name="ServerMain.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ServerMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.1369863" vertical-offset="0" max-vertical-offset="440">
-              <caret line="6" column="57" selection-start-line="6" selection-start-column="57" selection-end-line="6" selection-end-column="57" />
+            <state vertical-scroll-proportion="0.3196347" vertical-offset="0" max-vertical-offset="440">
+              <caret line="10" column="27" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -256,6 +255,10 @@
     <property name="FullScreen" value="false" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="options.lastSelected" value="reference.projectsettings.compiler.javacompiler" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -497,7 +500,11 @@
       <created>1432313734194</created>
       <updated>1432313734194</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Changed to Java 1.6">
+      <created>1432314525328</created>
+      <updated>1432314525328</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -552,7 +559,8 @@
     <MESSAGE value="Added any number of clients and fixed rebound angles... again" />
     <MESSAGE value="Include Jars in Project" />
     <MESSAGE value="Include Jars in Project For Real" />
-    <option name="LAST_COMMIT_MESSAGE" value="Include Jars in Project For Real" />
+    <MESSAGE value="Changed to Java 1.6" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed to Java 1.6" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -962,8 +970,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ServerMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1369863" vertical-offset="0" max-vertical-offset="440">
-          <caret line="6" column="57" selection-start-line="6" selection-start-column="57" selection-end-line="6" selection-end-column="57" />
+        <state vertical-scroll-proportion="0.3196347" vertical-offset="0" max-vertical-offset="440">
+          <caret line="10" column="27" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
           <folding />
         </state>
       </provider>
@@ -974,7 +982,7 @@
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
           <artifact-editor />
-          <last-edited>SocketPongServer:jar</last-edited>
+          <last-edited>SocketPong:jar</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1027,6 +1035,7 @@
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.6" />
               </list>
             </option>
           </splitter-proportions>
