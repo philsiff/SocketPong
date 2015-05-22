@@ -1,11 +1,14 @@
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
-
+import java.util.Scanner;
 import java.io.IOException;
 
 public class ServerMain {
 	public static void main(String[] args) throws IOException{
-		Server server = new Server(7777);
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("What port do you want to host it on?: ");
+        int port = Integer.parseInt(scanner.next());
+		Server server = new Server(port);
         AppGameContainer appgc;
         try {
             appgc = new AppGameContainer(server);

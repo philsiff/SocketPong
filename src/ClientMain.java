@@ -6,7 +6,12 @@ import java.util.Scanner;
 
 public class ClientMain {
 	public static void main(String[] args) throws IOException{
-		Client client = new Client("localhost", 7777);
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("What Ip: ");
+        String ip = scanner.next();
+        System.out.println("What Port: ");
+        int port = Integer.parseInt(scanner.next());
+		Client client = new Client(ip, port);
         AppGameContainer appgc;
         try {
             appgc = new AppGameContainer(client);
