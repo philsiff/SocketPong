@@ -6,7 +6,7 @@ import java.io.IOException;
 public class ServerMain {
 	public static void main(String[] args) throws IOException{
         Scanner scanner = new Scanner(System.in);
-        System.out.println("What port do you want to host it on?: ");
+        System.out.print("What port do you want to host it on?: ");
         int port = Integer.parseInt(scanner.next());
 		Server server = new Server(port);
         AppGameContainer appgc;

@@ -7,9 +7,9 @@ import java.util.Scanner;
 public class ClientMain {
 	public static void main(String[] args) throws IOException{
         Scanner scanner = new Scanner(System.in);
-        System.out.println("What Ip: ");
+        System.out.print("What Ip: ");
         String ip = scanner.next();
-        System.out.println("What Port: ");
+        System.out.print("What Port: ");
         int port = Integer.parseInt(scanner.next());
 		Client client = new Client(ip, port);
         AppGameContainer appgc;
