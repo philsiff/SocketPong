@@ -22,6 +22,8 @@ public class Server extends BasicGame{
     private boolean paddle2Hit = false;
     private int gameContainerHeight;
     private int gameContainerWidth;
+    private int score1 = 0;
+    private int score2 = 0;
 
     public Server(int port) throws IOException {
         super("Pong Server");
