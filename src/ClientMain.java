@@ -15,7 +15,7 @@ public class ClientMain {
         AppGameContainer appgc;
         try {
             appgc = new AppGameContainer(client);
-            appgc.setDisplayMode(800, 600, true);
+            appgc.setDisplayMode(800, 600, false);
             appgc.setTargetFrameRate(60);
             appgc.start();
         } catch (SlickException e) {

@@ -43,6 +43,9 @@ public class Server extends BasicGame{
                             sendToAll("evDWphmwFh" + clientList.size());
                         }
                         serverInfo.paddle2.x = gameContainerWidth*clientList.size() - 10 - paddleWidth;
+                        if(clientList.size() > 0){
+                            serverInfo.ball.movement = new Vector2f(3,0);
+                        }
                     }
                     catch(IOException e){ e.printStackTrace(); }
                 }
@@ -78,7 +81,7 @@ public class Server extends BasicGame{
         messageHandling.start();
     }
     public void init(GameContainer gc){
-        ball = new Ball(new Vector2f((float)2, (float) 1), 400, 300);
+        ball = new Ball(new Vector2f((float)0, (float) 0), 400, 300);
         paddle1 = new Paddle(10 + paddleWidth, gc.getHeight()/2 - (paddleHeight/2), paddleHeight, paddleWidth);
         paddle2 = new Paddle(gc.getWidth()*clientList.size() - 10 - paddleWidth, gc.getHeight()/2 - (paddleHeight/2), paddleHeight, paddleWidth);
         serverInfo = new ServerInfo(ball, paddle1, paddle2);
@@ -87,13 +90,13 @@ public class Server extends BasicGame{
     }
 
     public void update(GameContainer gc, int i){
-        if(serverInfo.ball.x < 0){
+        if(serverInfo.ball.x < 0 && clientList.size() > 0){
             serverInfo.ball.movement.set(-1 * serverInfo.ball.movement.getX(), serverInfo.ball.movement.getY());
-            serverInfo.paddle2Score++;
+            serverInfo.score2++;
         }
-        if(serverInfo.ball.x + (2 * serverInfo.ball.radius) > gc.getWidth() * (clientList.size())){
+        if(serverInfo.ball.x + (2 * serverInfo.ball.radius) > gc.getWidth() * (clientList.size()) && clientList.size() > 0){
             serverInfo.ball.movement.set(-1 * serverInfo.ball.movement.getX(), serverInfo.ball.movement.getY());
-            serverInfo.paddle1Score++;
+            serverInfo.score1++;
         }
         if(serverInfo.ball.y < 0){serverInfo.ball.movement.set(serverInfo.ball.movement.getX(), -1 * serverInfo.ball.movement.getY());}
         if(serverInfo.ball.y + (2 * serverInfo.ball.radius) > gc.getHeight()){serverInfo.ball.movement.set(serverInfo.ball.movement.getX(), -1 * serverInfo.ball.movement.getY());}

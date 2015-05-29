@@ -1,4 +1,4 @@
-import org.newdawn.slick.BasicGame;
+import org.newdawn.slick.*;
 
 import java.io.*;
 import java.net.*;
@@ -7,12 +7,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.newdawn.slick.AppGameContainer;
+import java.awt.Font;
 import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 
 
@@ -24,9 +20,12 @@ public class Client extends BasicGame {
     private Ball ball;
     private Paddle paddle1;
     private Paddle paddle2;
+    private int score1 = 0;
+    private int score2 = 0;
     private ClientInfo clientInfo;
     private Input input;
     private int numClients;
+    private TrueTypeFont font;
 
 
     public Client(String IPAddress, int port) throws IOException{
@@ -46,6 +45,8 @@ public class Client extends BasicGame {
                             ball = ((ServerInfo) message).ball;
                             paddle1 = ((ServerInfo) message).paddle1;
                             paddle2 = ((ServerInfo) message).paddle2;
+                            score1 = ((ServerInfo) message).score1;
+                            score2 = ((ServerInfo) message).score2;
                         }
 
                         if(message instanceof String){
@@ -70,28 +71,29 @@ public class Client extends BasicGame {
 
     public void init(GameContainer gc) throws SlickException{
         gc.setAlwaysRender(true);
-        clientInfo = new ClientInfo(clientNumber, paddle1);
+        this.clientInfo = new ClientInfo(clientNumber, paddle1);
+        this.font = new TrueTypeFont(new java.awt.Font("ubuntu", Font.PLAIN, 32), false);
     }
 
     public void update(GameContainer gc, int i) throws SlickException{
         input = gc.getInput();
         if(input.isKeyDown(Input.KEY_UP)){
-            if(clientNumber == 1){
+            if(clientNumber == 1 && paddle1.y >= 5){
                 paddle1.y -= 5;
                 clientInfo.paddle = paddle1;
                 send((Object)clientInfo);
-            }else if(clientNumber == 2){
+            }else if(clientNumber == 2 && paddle2.y >= 5){
                 paddle2.y -= 5;
                 clientInfo.paddle = paddle2;
                 send((Object)clientInfo);
             }
         }
         if(input.isKeyDown(Input.KEY_DOWN)){
-            if(clientNumber == 1){
+            if(clientNumber == 1 && paddle1.y <= gc.getHeight() - paddle1.height - 5){
                paddle1.y += 5;
                 clientInfo.paddle = paddle1;
                 send((Object)clientInfo);
-            }else if(clientNumber == 2){
+            }else if(clientNumber == 2 && paddle2.y <= gc.getHeight() - paddle1.height - 5){
                 paddle2.y += 5;
                 clientInfo.paddle = paddle2;
                 send((Object)clientInfo);
@@ -112,9 +114,18 @@ public class Client extends BasicGame {
                 ball.x -= gc.getWidth() * (clientNumber - 2);
             }
             ball.render(gc, g);
+            renderScore(gc, g);
         }
 
 
+    }
+
+    private void renderScore(GameContainer gc, Graphics g){
+        if(clientNumber == 1){
+            font.drawString(gc.getWidth()/2 - 20, 60, "" + score1);
+        }else if(clientNumber == 2){
+            font.drawString(gc.getWidth()/2 - 20, 60, "" + score2);
+        }
     }
 
     private class ConnectionToServer {
