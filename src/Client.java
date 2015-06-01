@@ -82,7 +82,7 @@ public class Client extends BasicGame {
                 paddle1.y -= 5;
                 clientInfo.paddle = paddle1;
                 send((Object)clientInfo);
-            }else if(clientNumber == 2 && paddle2.y >= 5){
+            }else if(clientNumber == numClients && paddle2.y >= 5){
                 paddle2.y -= 5;
                 clientInfo.paddle = paddle2;
                 send((Object)clientInfo);
@@ -93,7 +93,7 @@ public class Client extends BasicGame {
                paddle1.y += 5;
                 clientInfo.paddle = paddle1;
                 send((Object)clientInfo);
-            }else if(clientNumber == 2 && paddle2.y <= gc.getHeight() - paddle1.height - 5){
+            }else if(clientNumber == numClients && paddle2.y <= gc.getHeight() - paddle2.height - 5){
                 paddle2.y += 5;
                 clientInfo.paddle = paddle2;
                 send((Object)clientInfo);
@@ -106,12 +106,12 @@ public class Client extends BasicGame {
             if(clientNumber == 1) {
                 paddle1.render(gc, g);
             }
-            else if(clientNumber == 2) {
+            else if(clientNumber == numClients) {
                 paddle2.x -= gc.getWidth() * (numClients - 1);
                 ball.x -= gc.getWidth() * (numClients - 1);
                 paddle2.render(gc, g);
             }else{
-                ball.x -= gc.getWidth() * (clientNumber - 2);
+                ball.x -= gc.getWidth() * (clientNumber - 1);
             }
             ball.render(gc, g);
             renderScore(gc, g);
@@ -123,7 +123,7 @@ public class Client extends BasicGame {
     private void renderScore(GameContainer gc, Graphics g){
         if(clientNumber == 1){
             font.drawString(gc.getWidth()/2 - 20, 60, "" + score1);
-        }else if(clientNumber == 2){
+        }else if(clientNumber == numClients){
             font.drawString(gc.getWidth()/2 - 20, 60, "" + score2);
         }
     }

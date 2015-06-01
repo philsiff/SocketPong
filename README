@@ -10,5 +10,4 @@ To play the game:
     The Server can be hosted on any computer
     Clients must connect in a certain order
         First the leftmost computer
-        Then the rightmost computer
-        Then all of the other computers starting from the left going right
+        Then keep adding on computers to the right

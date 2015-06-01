@@ -24,6 +24,7 @@ public class Server extends BasicGame{
     private int gameContainerWidth;
     private int score1 = 0;
     private int score2 = 0;
+    private String state = "playing";
 
     public Server(int port) throws IOException {
         super("Pong Server");
@@ -43,7 +44,7 @@ public class Server extends BasicGame{
                             sendToAll("evDWphmwFh" + clientList.size());
                         }
                         serverInfo.paddle2.x = gameContainerWidth*clientList.size() - 10 - paddleWidth;
-                        if(clientList.size() > 0){
+                        if(clientList.size() != 0){
                             serverInfo.ball.movement = new Vector2f(3,0);
                         }
                     }
@@ -64,7 +65,7 @@ public class Server extends BasicGame{
                         if(message instanceof ClientInfo){
                             if(((ClientInfo) message).clientNumber == 1){
                                 serverInfo.paddle1 = ((ClientInfo) message).paddle;
-                            }else if(((ClientInfo) message).clientNumber == 2){
+                            }else if(((ClientInfo) message).clientNumber == clientList.size()){
                                 serverInfo.paddle2 = ((ClientInfo) message).paddle;
                             }
                         }
@@ -90,62 +91,99 @@ public class Server extends BasicGame{
     }
 
     public void update(GameContainer gc, int i){
-        if(serverInfo.ball.x < 0 && clientList.size() > 0){
-            serverInfo.ball.movement.set(-1 * serverInfo.ball.movement.getX(), serverInfo.ball.movement.getY());
-            serverInfo.score2++;
-        }
-        if(serverInfo.ball.x + (2 * serverInfo.ball.radius) > gc.getWidth() * (clientList.size()) && clientList.size() > 0){
-            serverInfo.ball.movement.set(-1 * serverInfo.ball.movement.getX(), serverInfo.ball.movement.getY());
-            serverInfo.score1++;
-        }
-        if(serverInfo.ball.y < 0){serverInfo.ball.movement.set(serverInfo.ball.movement.getX(), -1 * serverInfo.ball.movement.getY());}
-        if(serverInfo.ball.y + (2 * serverInfo.ball.radius) > gc.getHeight()){serverInfo.ball.movement.set(serverInfo.ball.movement.getX(), -1 * serverInfo.ball.movement.getY());}
-        serverInfo.ball.update(gc, i);
-        if (collision(serverInfo.paddle1, serverInfo.ball) && !paddle1Hit) {
-            float collisionAngle = calculateAngle(serverInfo.paddle1, serverInfo.ball);
-            System.out.println("Paddle1 Collision: " + collisionAngle);
-            if(serverInfo.ball.movement.getY() > 0){
-                if(collisionAngle < 0){
-                    serverInfo.ball.setMovementAngle(-collisionAngle);
-                }else{
-                    serverInfo.ball.setMovementAngle(collisionAngle);
-                }
-            }else{
-                if(collisionAngle < 0){
-                    serverInfo.ball.setMovementAngle(collisionAngle);
-                }else{
-                    serverInfo.ball.setMovementAngle(-collisionAngle);
-                }
+        if(state.equals("playing")) {
+            ///////Check if the Ball hits the sides;
+            if (serverInfo.ball.x < 0 && clientList.size() > 0) {
+                serverInfo.ball.movement.set(-1 * serverInfo.ball.movement.getX(), serverInfo.ball.movement.getY());
+                serverInfo.score2++;
+                state = "countdown";
             }
-            if(serverInfo.ball.magnitude < 10) {
-                serverInfo.ball.movement.scale((float)1.1);
+            if (serverInfo.ball.x + (2 * serverInfo.ball.radius) > gc.getWidth() * (clientList.size()) && clientList.size() > 0) {
+                serverInfo.ball.movement.set(-1 * serverInfo.ball.movement.getX(), serverInfo.ball.movement.getY());
+                serverInfo.score1++;
+                state = "countdown";
             }
-            paddle1Hit = true;
+
+            ///////Check if ball hits ceiling or floor and change balls vertical movement
+
+            if (serverInfo.ball.y < 0) {
+                serverInfo.ball.movement.set(serverInfo.ball.movement.getX(), -1 * serverInfo.ball.movement.getY());
+            }
+            if (serverInfo.ball.y + (2 * serverInfo.ball.radius) > gc.getHeight()) {
+                serverInfo.ball.movement.set(serverInfo.ball.movement.getX(), -1 * serverInfo.ball.movement.getY());
+            }
+
+            ////////Update Ball Position based on its movement vectors
+
+            serverInfo.ball.update(gc, i);
+
+            //////////////Check Collision and Change Ball Direction Angle Depending on where it hits the paddle
+
+            if (collision(serverInfo.paddle1, serverInfo.ball) && !paddle1Hit) {
+                float collisionAngle = calculateAngle(serverInfo.paddle1, serverInfo.ball);
+                if (serverInfo.ball.movement.getY() > 0) {
+                    if (collisionAngle < 0) {
+                        collisionAngle = Math.max(-60, collisionAngle);
+                        serverInfo.ball.setMovementAngle(-collisionAngle);
+                    } else {
+                        collisionAngle = Math.min(60, collisionAngle);
+                        serverInfo.ball.setMovementAngle(collisionAngle);
+                    }
+                } else {
+                    if (collisionAngle < 0) {
+                        collisionAngle = Math.max(-60, collisionAngle);
+                        serverInfo.ball.setMovementAngle(collisionAngle);
+                    } else {
+                        collisionAngle = Math.min(60, collisionAngle);
+                        serverInfo.ball.setMovementAngle(-collisionAngle);
+                    }
+                }
+                /////Increase Ball speed
+                if (serverInfo.ball.magnitude < 10) {
+                    serverInfo.ball.movement.scale((float) 1.1);
+                }
+                /////Deactive paddle hit and reactivate other paddle. Makes sure ball doesn't get stuck in paddle
+                paddle1Hit = true;
+                paddle2Hit = false;
+            }
+
+            if (collision(serverInfo.paddle2, serverInfo.ball) && !paddle2Hit) {
+                float collisionAngle = calculateAngle(serverInfo.paddle2, serverInfo.ball);
+                if (serverInfo.ball.movement.getY() > 0) {
+                    if (collisionAngle < 0) {
+                        collisionAngle = Math.min(-120, collisionAngle);
+                        serverInfo.ball.setMovementAngle(-collisionAngle);
+                    } else {
+                        collisionAngle = Math.max(120, collisionAngle);
+                        serverInfo.ball.setMovementAngle(collisionAngle);
+                    }
+                } else {
+                    if (collisionAngle < 0) {
+                        collisionAngle = Math.min(-120, collisionAngle);
+                        serverInfo.ball.setMovementAngle(collisionAngle);
+                    } else {
+                        collisionAngle = Math.max(120, collisionAngle);
+                        serverInfo.ball.setMovementAngle(-collisionAngle);
+                    }
+                }
+                //////////Increase ball speed;
+                if (serverInfo.ball.magnitude < 5) {
+                    serverInfo.ball.movement.scale((float) 1.1);
+                }
+                /////////Deactivate hit paddle and reactivate other paddle. Makes sure ball doesn't get stuck in paddle
+                paddle1Hit = false;
+                paddle2Hit = true;
+            }
+        }else if(state.equals("countdown")){
+            state = "playing";
+            serverInfo.ball.x = (gc.getWidth() * (clientList.size()))/2;
+            serverInfo.ball.y = gc.getHeight() / 2;
+            serverInfo.ball.movement = new Vector2f(2,0);
+            paddle1Hit = false;
             paddle2Hit = false;
         }
-        if (collision(serverInfo.paddle2, serverInfo.ball) && !paddle2Hit){
-            float collisionAngle = calculateAngle(serverInfo.paddle2, serverInfo.ball);
-            System.out.println("Paddle2 Collision: " + collisionAngle);
-            if(serverInfo.ball.movement.getY() > 0){
-                if(collisionAngle < 0){
-                    serverInfo.ball.setMovementAngle(-collisionAngle);
-                }else{
-                    serverInfo.ball.setMovementAngle(collisionAngle);
-                }
-            }else{
-                if(collisionAngle < 0){
-                    serverInfo.ball.setMovementAngle(collisionAngle);
-                }else{
-                    serverInfo.ball.setMovementAngle(-collisionAngle);
-                }
-            }
-            if(serverInfo.ball.magnitude < 5) {
-                serverInfo.ball.movement.scale((float)1.1);
-            }
-            paddle1Hit = false;
-            paddle2Hit = true;
-        }
 
+        ///////Send Info to Client
         sendToAll(serverInfo);
     }
 
