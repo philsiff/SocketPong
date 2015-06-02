@@ -5,12 +5,13 @@ import java.io.Serializable;
 /**
  * Created by Phillip on 5/12/2015.
  */
-public class ServerInfo implements Serializable{
+public class ServerInfo implements Serializable{ //Holds all information that will be changed by server and needs to be sent to client
     Ball ball;
     Paddle paddle1;
     Paddle paddle2;
     int score1;
     int score2;
+    String winner ="none";
 
     public ServerInfo(Ball ball, Paddle paddle1, Paddle paddle2) {
         this.ball = ball;

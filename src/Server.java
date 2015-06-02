@@ -8,7 +8,12 @@ import java.util.logging.Logger;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Vector2f;
 
-public class Server extends BasicGame{
+public class Server extends BasicGame{ //extends BasicGame so we get that update and render loops easy
+    //Server sends its information to its clients by sending a ServerInfo object
+    //Clients sends its information to the server by sending a ClientInfo object
+    //All updates are done modifying the ServerInfo ojbect and then sending it out to clients so they can update their information
+
+    //Various Bloated Instanced Variables
     private ArrayList<ConnectionToClient> clientList;
     private LinkedBlockingQueue<Object> messages;
     private ServerSocket serverSocket;
@@ -22,30 +27,29 @@ public class Server extends BasicGame{
     private boolean paddle2Hit = false;
     private int gameContainerHeight;
     private int gameContainerWidth;
-    private int score1 = 0;
-    private int score2 = 0;
     private String state = "playing";
 
     public Server(int port) throws IOException {
+        //Sets up serversockt which clients connect to and list of clients as well as queue of messages
         super("Pong Server");
         clientList = new ArrayList<ConnectionToClient>();
         messages = new LinkedBlockingQueue<Object>();
         serverSocket = new ServerSocket(port);
 
         Thread accept = new Thread() {
-            public void run(){
+            public void run(){ //sets up thread to continually check for new connections to server
                 while(true){
                     try{
-                        Socket s = serverSocket.accept();
+                        Socket s = serverSocket.accept();//if the client connects then it sends a message to server what number it is
                         System.out.println("User Connected");
-                        clientList.add(new ConnectionToClient(s));
+                        clientList.add(new ConnectionToClient(s)); //Connection to client holds all info of client and can get and send message from/to client
                         sendToOne(clientList.size()-1, "HczGkfodKL" + clientList.size());
                         if(clientList.size() >= 1){
                             sendToAll("evDWphmwFh" + clientList.size());
                         }
-                        serverInfo.paddle2.x = gameContainerWidth*clientList.size() - 10 - paddleWidth;
+                        serverInfo.paddle2.x = gameContainerWidth*clientList.size() - 10 - paddleWidth; //updates paddle x to be in farthest monitor
                         if(clientList.size() != 0){
-                            serverInfo.ball.movement = new Vector2f(3,0);
+                            serverInfo.ball.movement = new Vector2f(3,0); //resets ball movement when A user connects for some reason
                         }
                     }
                     catch(IOException e){ e.printStackTrace(); }
@@ -57,12 +61,12 @@ public class Server extends BasicGame{
         accept.start();
 
         Thread messageHandling = new Thread() {
-            public void run(){
+            public void run(){ //Continually checks for messages that are added to the queue by various ConnectionToClient objects
                 while(true){
                     try{
                         Object message = messages.take();
                         // Do some handling here...
-                        if(message instanceof ClientInfo){
+                        if(message instanceof ClientInfo){ //updates y of paddle depending on which client. Client only sends updates of their paddle movement
                             if(((ClientInfo) message).clientNumber == 1){
                                 serverInfo.paddle1 = ((ClientInfo) message).paddle;
                             }else if(((ClientInfo) message).clientNumber == clientList.size()){
@@ -82,6 +86,7 @@ public class Server extends BasicGame{
         messageHandling.start();
     }
     public void init(GameContainer gc){
+        //Initialize various things
         ball = new Ball(new Vector2f((float)0, (float) 0), 400, 300);
         paddle1 = new Paddle(10 + paddleWidth, gc.getHeight()/2 - (paddleHeight/2), paddleHeight, paddleWidth);
         paddle2 = new Paddle(gc.getWidth()*clientList.size() - 10 - paddleWidth, gc.getHeight()/2 - (paddleHeight/2), paddleHeight, paddleWidth);
@@ -174,13 +179,25 @@ public class Server extends BasicGame{
                 paddle1Hit = false;
                 paddle2Hit = true;
             }
+            if(serverInfo.score1 >= 5 && serverInfo.score1 - serverInfo.score2 >= 2){
+                state = "end";
+                serverInfo.winner = "1";
+            }else if(serverInfo.score2 >= 5 && serverInfo.score2 - serverInfo.score1 >= 2){
+                state = "end";
+                serverInfo.winner = "" + clientList.size();
+            }
         }else if(state.equals("countdown")){
+            //resets ball position
             state = "playing";
             serverInfo.ball.x = (gc.getWidth() * (clientList.size()))/2;
             serverInfo.ball.y = gc.getHeight() / 2;
             serverInfo.ball.movement = new Vector2f(2,0);
             paddle1Hit = false;
             paddle2Hit = false;
+        }else if (state.equals("end")){
+                serverInfo.ball.x = (gc.getWidth() * (clientList.size()))/2;
+                serverInfo.ball.y = gc.getHeight() / 2;
+                serverInfo.ball.movement = new Vector2f(0,0);
         }
 
         ///////Send Info to Client
@@ -192,16 +209,16 @@ public class Server extends BasicGame{
     }
 
     private class ConnectionToClient {
-        ObjectInputStream in;
-        ObjectOutputStream out;
-        Socket socket;
+        ObjectInputStream in; //get stuff from Client
+        ObjectOutputStream out; //send stuff to Client
+        Socket socket; //Connection between Client and Server
 
         ConnectionToClient(final Socket socket) throws IOException {
             this.socket = socket;
             out = new ObjectOutputStream(socket.getOutputStream());
 
             Thread read = new Thread(){
-                public void run(){
+                public void run(){ //keep checking if client has written something to inputstream
                     while(true){
                         try{
                             if(in == null){in = new ObjectInputStream(socket.getInputStream());}
@@ -221,6 +238,7 @@ public class Server extends BasicGame{
             read.start();
         }
 
+        //Send message to Client
         public void write(Object obj) {
             try{
                 out.writeObject((Object) obj);
@@ -240,6 +258,7 @@ public class Server extends BasicGame{
         }
     }
 
+    //Checks for collisions between axis alligned rectangle and circle
     public boolean collision(Paddle paddle, Ball ball){
         float ballCX = ball.x + ball.radius;
         float ballCY = ball.y + ball.radius;

@@ -19,6 +19,7 @@ public class Paddle implements Serializable {
         this.width = width;
     }
 
+    //draw the rectangle in the gamecontainer
     public void render(GameContainer gc, Graphics g){
         g.draw(new Rectangle(x, y, width, height));
     }

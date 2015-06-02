@@ -26,9 +26,10 @@ public class Client extends BasicGame {
     private Input input;
     private int numClients;
     private TrueTypeFont font;
+    private String winner;
 
 
-    public Client(String IPAddress, int port) throws IOException{
+    public Client(String IPAddress, int port) throws IOException{ //Connect to server and create ConnectionToServer object
         super("Pong Client");
 
         socket = new Socket(IPAddress, port);
@@ -36,7 +37,7 @@ public class Client extends BasicGame {
         server = new ConnectionToServer(socket);
 
         Thread messageHandling = new Thread() {
-            public void run(){
+            public void run(){ //Check for messages put in queue by ConnectionToServer object
                 while(true){
                     try{
                         Object message = messages.take();
@@ -47,6 +48,7 @@ public class Client extends BasicGame {
                             paddle2 = ((ServerInfo) message).paddle2;
                             score1 = ((ServerInfo) message).score1;
                             score2 = ((ServerInfo) message).score2;
+                            winner = ((ServerInfo) message).winner;
                         }
 
                         if(message instanceof String){
@@ -58,6 +60,9 @@ public class Client extends BasicGame {
                             if(((String) message).substring(0, 10).equals("evDWphmwFh")){
                                 numClients = Integer.parseInt(((String) message).substring(10,11));
                                 System.out.println("NumClients: " + numClients);
+                            }
+                            if(((String) message).equals("terminate")){
+                                System.exit(0);
                             }
                         }
                     }
@@ -72,7 +77,7 @@ public class Client extends BasicGame {
     public void init(GameContainer gc) throws SlickException{
         gc.setAlwaysRender(true);
         this.clientInfo = new ClientInfo(clientNumber, paddle1);
-        this.font = new TrueTypeFont(new java.awt.Font("ubuntu", Font.PLAIN, 32), false);
+        this.font = new TrueTypeFont(new java.awt.Font("Arial", Font.PLAIN, 32), false);
     }
 
     public void update(GameContainer gc, int i) throws SlickException{
@@ -102,35 +107,48 @@ public class Client extends BasicGame {
     }
 
     public void render(GameContainer gc, Graphics g){
-        if(paddle2 != null && paddle1 != null && ball != null){
-            if(clientNumber == 1) {
-                paddle1.render(gc, g);
+        if(winner.equals("none")) {
+            if (paddle2 != null && paddle1 != null && ball != null) {
+                if (clientNumber == 1) {
+                    paddle1.render(gc, g);
+                } else if (clientNumber == numClients) {
+                    paddle2.x -= gc.getWidth() * (numClients - 1);
+                    ball.x -= gc.getWidth() * (numClients - 1);
+                    paddle2.render(gc, g);
+                } else {
+                    ball.x -= gc.getWidth() * (clientNumber - 1);
+                }
+                ball.render(gc, g);
+                renderScore(gc, g);
             }
-            else if(clientNumber == numClients) {
-                paddle2.x -= gc.getWidth() * (numClients - 1);
-                ball.x -= gc.getWidth() * (numClients - 1);
-                paddle2.render(gc, g);
-            }else{
-                ball.x -= gc.getWidth() * (clientNumber - 1);
-            }
-            ball.render(gc, g);
-            renderScore(gc, g);
         }
-
+        else if(clientNumber == 1){
+            if(winner.equals("1")) {
+                font.drawString(gc.getWidth() / 2 - 20, gc.getHeight() / 2, "YOU WIN!");
+            }else{
+                font.drawString(gc.getWidth()/2 - 20, gc.getHeight()/2, "YOU LOSE");
+            }
+        }else if(clientNumber == numClients) {
+            if(winner.equals(""+numClients)){
+                font.drawString(gc.getWidth()/2 - 20, gc.getHeight()/2, "YOU WIN!");
+            }else{
+                font.drawString(gc.getWidth()/2 - 20, gc.getHeight()/2, "YOU LOSE");
+            }
+        }
 
     }
 
     private void renderScore(GameContainer gc, Graphics g){
         if(clientNumber == 1){
-            font.drawString(gc.getWidth()/2 - 20, 60, "" + score1);
+            font.drawString(gc.getWidth()/2 - 30, 60, "Player 1: " + score1);
         }else if(clientNumber == numClients){
-            font.drawString(gc.getWidth()/2 - 20, 60, "" + score2);
+            font.drawString(gc.getWidth()/2 - 30, 60, "Player 2: " + score2);
         }
     }
 
-    private class ConnectionToServer {
-        ObjectInputStream in;
-        ObjectOutputStream out;
+    private class ConnectionToServer { //Holds socket of Server and can read and write from server
+        ObjectInputStream in; //get stuff from server
+        ObjectOutputStream out; //send stuff to server
         Socket socket;
 
         ConnectionToServer(final Socket socket) throws IOException {
@@ -139,7 +157,7 @@ public class Client extends BasicGame {
             out = new ObjectOutputStream(socket.getOutputStream());
 
             Thread read = new Thread(){
-                public void run(){
+                public void run(){ //Keep checking for if server has sent something. If yes then put the server's message onto the queue.
                     while(true){
                         try{
                             if(in==null){in = new ObjectInputStream(socket.getInputStream());}

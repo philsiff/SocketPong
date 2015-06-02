@@ -16,6 +16,7 @@ public class Ball implements Serializable{
     float magnitude;
     float angle;
 
+    //Constructor
     public Ball(Vector2f movement, int y, int x) {
         this.movement = movement;
         this.y = y;
@@ -25,15 +26,18 @@ public class Ball implements Serializable{
         this.angle = (float) movement.getTheta();
     }
 
+    //Update ball x and y depending on movement vector
     public void update(GameContainer gc, int i){
         x += movement.getX();
         y += movement.getY();
     }
 
+    //Draw the ball
     public void render(GameContainer gc, Graphics g){
         g.draw(new Circle(x + radius, y + radius, radius));
     }
 
+    //Vector math to change angle of ball's movement
     public void setMovementAngle(float angle){
         movement.setTheta(angle);
     }
