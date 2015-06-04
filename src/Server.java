@@ -201,6 +201,7 @@ public class Server extends BasicGame{ //extends BasicGame so we get that update
         }
 
         ///////Send Info to Client
+        System.out.println(serverInfo.paddle2.x + ", " + serverInfo.paddle2.y);
         sendToAll(serverInfo);
     }
 
