@@ -96,6 +96,7 @@ public class Server extends BasicGame{ //extends BasicGame so we get that update
     }
 
     public void update(GameContainer gc, int i){
+        serverInfo.paddle2.x = gameContainerWidth*clientList.size() - 10 - paddleWidth;
         if(state.equals("playing")) {
             ///////Check if the Ball hits the sides;
             if (serverInfo.ball.x < 0 && clientList.size() > 0) {
@@ -201,7 +202,7 @@ public class Server extends BasicGame{ //extends BasicGame so we get that update
         }
 
         ///////Send Info to Client
-        System.out.println(serverInfo.paddle2.x + ", " + serverInfo.paddle2.y);
+        serverInfo.paddle2.x = gameContainerWidth*clientList.size() - 10 - paddleWidth;
         sendToAll(serverInfo);
     }
 
