@@ -51,6 +51,8 @@ public class Server extends BasicGame{ //extends BasicGame so we get that update
                         if(clientList.size() != 0){
                             serverInfo.ball.movement = new Vector2f(3,0); //resets ball movement when A user connects for some reason
                         }
+                        paddle1Hit = false;
+                        paddle2Hit = false;
                     }
                     catch(IOException e){ e.printStackTrace(); }
                 }
