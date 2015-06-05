@@ -1,11 +1,11 @@
 Play pong over multiple computers that are next to each other!
 To play the game:
     Server:
-        Navigate to the libs folder
-        Type java -cp SocketPong.jar ServerMain
+        Navigate to the Project Folder
+        Type ./SocketPongServer.sh
     Client:
-        Navigate to the libs folder
-        Type java -cp SocketPong.jar ClientMain
+        Navigate to the Project Folder
+        Type ./SocketPongClient.sh
 
     The Server can be hosted on any computer
     Clients must connect in a certain order

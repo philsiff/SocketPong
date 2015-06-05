@@ -7,11 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0edba39c-3483-4dcc-8602-ed04c8fcb546" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SocketPongClient.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SocketPongServer.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/SocketPong.jar" afterPath="$PROJECT_DIR$/libs/SocketPong.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ClientMain.java" afterPath="$PROJECT_DIR$/src/ClientMain.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README" afterPath="$PROJECT_DIR$/README" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Pong.iws" />
@@ -56,11 +53,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="README" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="80" max-vertical-offset="360">
-              <caret line="4" column="47" selection-start-line="4" selection-start-column="47" selection-end-line="4" selection-end-column="47" />
+            <state vertical-scroll-proportion="0.28169015" vertical-offset="0" max-vertical-offset="497">
+              <caret line="7" column="34" selection-start-line="7" selection-start-column="34" selection-end-line="7" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -126,11 +123,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SocketPongClient.sh" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="SocketPongClient.sh" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/SocketPongClient.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.084745765" vertical-offset="0" max-vertical-offset="472">
-              <caret line="2" column="22" selection-start-line="2" selection-start-column="22" selection-end-line="2" selection-end-column="22" />
+            <state vertical-scroll-proportion="-1.6" vertical-offset="0" max-vertical-offset="160">
+              <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -158,7 +155,6 @@
       <list>
         <option value="$PROJECT_DIR$/src/ServerMain.java" />
         <option value="$PROJECT_DIR$/MEADME" />
-        <option value="$PROJECT_DIR$/README" />
         <option value="$PROJECT_DIR$/src/Ball.java" />
         <option value="$PROJECT_DIR$/src/Paddle.java" />
         <option value="$PROJECT_DIR$/src/ClientInfo.java" />
@@ -169,6 +165,7 @@
         <option value="$PROJECT_DIR$/libs/SocketPongClient.sh" />
         <option value="$PROJECT_DIR$/SocketPongServer.sh" />
         <option value="$PROJECT_DIR$/SocketPongClient.sh" />
+        <option value="$PROJECT_DIR$/README" />
       </list>
     </option>
   </component>
@@ -595,7 +592,11 @@
       <created>1433442748098</created>
       <updated>1433442748099</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Added Bash Files to Run Client and Server">
+      <created>1433522921422</created>
+      <updated>1433522921422</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -663,7 +664,8 @@
     <MESSAGE value="Actually Rebuilt Jar File" />
     <MESSAGE value="Fixed disapearing paddle" />
     <MESSAGE value="Fixed Inactive Paddle" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed Inactive Paddle" />
+    <MESSAGE value="Added Bash Files to Run Client and Server" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Bash Files to Run Client and Server" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -910,14 +912,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
-          <caret line="4" column="47" selection-start-line="4" selection-start-column="47" selection-end-line="4" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Client.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="880" max-vertical-offset="4020">
@@ -976,8 +970,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/SocketPongClient.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.084745765" vertical-offset="0" max-vertical-offset="472">
-          <caret line="2" column="22" selection-start-line="2" selection-start-column="22" selection-end-line="2" selection-end-column="22" />
+        <state vertical-scroll-proportion="-1.6" vertical-offset="0" max-vertical-offset="160">
+          <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.28169015" vertical-offset="0" max-vertical-offset="497">
+          <caret line="7" column="34" selection-start-line="7" selection-start-column="34" selection-end-line="7" selection-end-column="34" />
           <folding />
         </state>
       </provider>
