@@ -111,14 +111,19 @@ public class Client extends BasicGame {
             if (paddle2 != null && paddle1 != null && ball != null) {
                 if (clientNumber == 1) {
                     paddle1.render(gc, g);
+                    ball.render(gc, g);
                 } else if (clientNumber == numClients) {
                     paddle2.x -= gc.getWidth() * (numClients - 1);
                     ball.x -= gc.getWidth() * (numClients - 1);
                     paddle2.render(gc, g);
+                    ball.render(gc, g);
+                    paddle2.x += gc.getWidth() * (numClients - 1);
+                    ball.x += gc.getWidth() * (numClients - 1);
                 } else {
                     ball.x -= gc.getWidth() * (clientNumber - 1);
+                    ball.render(gc, g);
+                    ball.x += gc.getWidth() * (clientNumber - 1);
                 }
-                ball.render(gc, g);
                 renderScore(gc, g);
             }
         }
