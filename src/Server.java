@@ -90,7 +90,7 @@ public class Server extends BasicGame{ //extends BasicGame so we get that update
     }
     public void init(GameContainer gc){
         //Initialize various things
-        ball = new Ball(new Vector2f((float)0, (float) 0), 400, 300);
+        ball = new Ball(new Vector2f((float)3, (float) 0), (gc.getWidth() * clientList.size())/2, gc.getHeight()/2);
         paddle1 = new Paddle(10 + paddleWidth, gc.getHeight()/2 - (paddleHeight/2), paddleHeight, paddleWidth);
         paddle2 = new Paddle(gc.getWidth()*clientList.size() - 10 - paddleWidth, gc.getHeight()/2 - (paddleHeight/2), paddleHeight, paddleWidth);
         serverInfo = new ServerInfo(ball, paddle1, paddle2);

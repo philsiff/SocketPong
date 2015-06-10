@@ -94,11 +94,11 @@ public class Client extends BasicGame {
             }
         }
         if(input.isKeyDown(Input.KEY_DOWN)){
-            if(clientNumber == 1 && paddle1.y <= gc.getHeight() - paddle1.height - 5){
+            if(clientNumber == 1 && paddle1.y <= gc.getHeight() - paddle1.height - 10){
                paddle1.y += 5;
                 clientInfo.paddle = paddle1;
                 send((Object)clientInfo);
-            }else if(clientNumber == numClients && paddle2.y <= gc.getHeight() - paddle2.height - 5){
+            }else if(clientNumber == numClients && paddle2.y <= gc.getHeight() - paddle2.height - 10){
                 paddle2.y += 5;
                 clientInfo.paddle = paddle2;
                 send((Object)clientInfo);
