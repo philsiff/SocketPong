@@ -230,10 +230,18 @@ public class Server extends BasicGame{ //extends BasicGame so we get that update
                             Object obj = in.readObject();
                             messages.put(obj);
                         }
-                        catch(IOException e){ e.printStackTrace(); } catch (ClassNotFoundException e) {
+                        catch(IOException e){
                             e.printStackTrace();
+                            sendToAll("terminate");
+                            System.exit(0);
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                            sendToAll("terminate");
+                            System.exit(0);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
+                            sendToAll("terminate");
+                            System.exit(0);
                         }
                     }
                 }

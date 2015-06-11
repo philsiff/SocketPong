@@ -41,7 +41,7 @@ public class Client extends BasicGame {
                 while(true){
                     try{
                         Object message = messages.take();
-                        // Do some handling here...
+                        // Updates client's variables depending on what the server sends
                         if(message instanceof ServerInfo){
                             ball = ((ServerInfo) message).ball;
                             paddle1 = ((ServerInfo) message).paddle1;
@@ -51,7 +51,12 @@ public class Client extends BasicGame {
                             winner = ((ServerInfo) message).winner;
                         }
 
+                        //Various possible messages from the server
                         if(message instanceof String){
+                            if(((String) message).equals("terminate")){
+                                System.out.println("Terminate Message Recieved");
+                                System.exit(0);
+                            }
                             if(((String) message).substring(0, 10).equals("HczGkfodKL")){
                                 clientNumber = Integer.parseInt(((String) message).substring(10, 11));
                                 System.out.println(clientNumber);
@@ -60,9 +65,6 @@ public class Client extends BasicGame {
                             if(((String) message).substring(0, 10).equals("evDWphmwFh")){
                                 numClients = Integer.parseInt(((String) message).substring(10,11));
                                 System.out.println("NumClients: " + numClients);
-                            }
-                            if(((String) message).equals("terminate")){
-                                System.exit(0);
                             }
                         }
                     }
@@ -73,13 +75,13 @@ public class Client extends BasicGame {
 
         messageHandling.start();
     }
-
+    //initialize some variables used in the rendering
     public void init(GameContainer gc) throws SlickException{
         gc.setAlwaysRender(true);
         this.clientInfo = new ClientInfo(clientNumber, paddle1);
         this.font = new TrueTypeFont(new java.awt.Font("Arial", Font.PLAIN, 32), false);
     }
-
+    //Update Loop: Checks for up/down arrow keys, changes y position of paddle, and sends message to the server of updated paddle y
     public void update(GameContainer gc, int i) throws SlickException{
         input = gc.getInput();
         if(input.isKeyDown(Input.KEY_UP)){
@@ -105,7 +107,7 @@ public class Client extends BasicGame {
             }
         }
     }
-
+    //Draws the paddle and ball depending on which monitor the client is and where the ball is as well as draw score
     public void render(GameContainer gc, Graphics g){
         if(winner.equals("none")) {
             if (paddle2 != null && paddle1 != null && ball != null) {
@@ -142,7 +144,7 @@ public class Client extends BasicGame {
         }
 
     }
-
+    //draws score
     private void renderScore(GameContainer gc, Graphics g){
         if(clientNumber == 1){
             font.drawString(gc.getWidth()/2 - 30, 60, "Player 1: " + score1);
@@ -150,7 +152,7 @@ public class Client extends BasicGame {
             font.drawString(gc.getWidth()/2 - 30, 60, "Player 2: " + score2);
         }
     }
-
+    //holds socket, inputstream, and outputstream
     private class ConnectionToServer { //Holds socket of Server and can read and write from server
         ObjectInputStream in; //get stuff from server
         ObjectOutputStream out; //send stuff to server
@@ -172,9 +174,11 @@ public class Client extends BasicGame {
                         catch(IOException e){ e.printStackTrace(); } catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
+                            System.exit(0);
 						} catch (ClassNotFoundException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
+                            System.exit(0);
 						}
                     }
                 }
