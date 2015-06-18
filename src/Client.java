@@ -58,12 +58,12 @@ public class Client extends BasicGame {
                                 System.exit(0);
                             }
                             if(((String) message).substring(0, 10).equals("HczGkfodKL")){
-                                clientNumber = Integer.parseInt(((String) message).substring(10, 11));
+                                clientNumber = Integer.parseInt(((String) message).substring(10));
                                 System.out.println(clientNumber);
                                 System.out.println("NumClients: " + numClients);
                             }
                             if(((String) message).substring(0, 10).equals("evDWphmwFh")){
-                                numClients = Integer.parseInt(((String) message).substring(10,11));
+                                numClients = Integer.parseInt(((String) message).substring(10));
                                 System.out.println("NumClients: " + numClients);
                             }
                         }
